@@ -1,0 +1,8 @@
+pyvenv.cfg
+Lib/*
+Scripts/*
+*.code-workspace
+.vscode/settings.json
+.vscode/launch.json
+__pycache__/*
+share/*
