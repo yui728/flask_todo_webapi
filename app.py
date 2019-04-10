@@ -9,18 +9,21 @@ db = init_db(app)
 init_schema(app)
 # todolist = ToDoList()
 
+# 全てのToDoを取得する
 @app.route("/api/todoitems", methods = ["GET"])
 def get_todoitems():
     items = ToDoItem.query.all()
     return items_schema.jsonify(items)
 
 
+#  item_idで指定したToDoを取得する
 @app.route("/api/todoitems/<int:item_id>", methods = ["GET"])
 def get_todoitem(item_id):
     item = ToDoItem.query.filter_by(item_id = item_id).first_or_404()
     return item_schema.jsonify(item)
 
 
+# 新しいToDoを追加する
 @app.route("/api/todoitems", methods = ["POST"])
 def add_todoitem():
     if not "title" in request.json:
@@ -31,6 +34,7 @@ def add_todoitem():
     return item_schema.jsonify(item)
 
 
+# 指定したitem_idのToDoを削除する
 @app.route("/api/todoitems/<int:item_id>", methods = ["DELETE"])
 def delete_todoitem(item_id):
     item = ToDoItem.query.filter_by(item_id = item_id).first_or_404()
@@ -39,43 +43,10 @@ def delete_todoitem(item_id):
     return jsonify({"result": True})
 
 
+# 指定したitem_idのToDoのdoneを更新する
 @app.route("/api/todoitems/<int:item_id>", methods = ["PUT"])
 def update_todoitem(item_id):
     item = ToDoItem.query.filter_by(item_id = item_id).first_or_404()
     item.done = not item.done
     db.session.commit()
     return item_schema.jsonify(item)
-
-# @app.route("/")
-# def show_todolist():
-#     return render_template("showtodo.html",todolist=todolist.get_all())
-
-
-# @app.route("/additem", methods=["POST"])
-# def add_item():
-#     title = request.form["title"]
-#     if not title:
-#         return redirect("/")
-
-#     todolist.add(title)
-#     return redirect("/")
-
-
-# @app.route("/deleteitem/<int:item_id>")
-# def delete_todoitem(item_id):
-#     todolist.delete(item_id)
-#     return redirect("/")
-
-
-# @app.route("/deletealldoneitems")
-# def delete_alldoneitems():
-#     todolist.delete_doneitem()
-#     redirect("/")
-
-
-# @app.route("/updatedone", methods=["POST"])
-# def update_done():
-#     keys = request.form.keys()
-#     items = [int(x) for x in keys]
-#     todolist.update_done(items)
-#     return redirect("/")
