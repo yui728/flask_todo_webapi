@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 db = init_db(app)
 init_schema(app)
-# todolist = ToDoList()
 
 # 全てのToDoを取得する
 @app.route("/api/todoitems", methods = ["GET"])
